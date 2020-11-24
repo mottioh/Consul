@@ -1,0 +1,25 @@
+---
+- name: install consul client
+  hosts: consul_client
+  become: yes
+  tasks:
+  - name: install nginx
+    apt:
+      update_cache: yes
+      name: nginx
+      
+
+  - name: copy consul client script
+    copy: src=/etc/ansible/scripts/consul-agent.sh dest=/home/ubuntu mode=0777
+  
+  - name: copy consul JSON check file
+    copy: src=/etc/ansible/scripts/nginx80.json dest=/home/ubuntu mode=0777
+
+  - name: Execute the script
+    shell: /home/ubuntu/consul-agent.sh
+    notify: register service
+
+  handlers:
+  - name: register service
+    shell: curl -i -X PUT --data @/home/ubuntu/nginx80.json http://127.0.0.1:8500/v1/agent/service/register
+

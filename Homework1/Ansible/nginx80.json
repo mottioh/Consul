@@ -1,0 +1,12 @@
+{
+  "name": "web",
+  "port": 80,
+  "check": {
+    "name": "test",
+    "args": [
+      "curl",
+      "localhost"
+    ],
+    "interval": "10s"
+  }
+}
